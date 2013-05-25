@@ -1,7 +1,6 @@
 var express = require('express'),
     less = require('less-middleware'),
     routes = require('./routes'),
-    user = require('./routes/user'),
     http = require('http'),
     path = require('path');
 
@@ -32,7 +31,6 @@ app.configure('production', function(){
 });
 
 app.get('/', routes.index);
-app.get('/users', user.list);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Party listening on port ' + app.get('port'));
