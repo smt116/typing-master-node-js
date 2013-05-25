@@ -23,9 +23,13 @@ app.configure(function() {
   app.use(express.static(path.join(__dirname, 'public')));
 });
 
-if ('development' == app.get('env')) {
+app.configure('development', function(){
+  app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
+});
+
+app.configure('production', function(){
   app.use(express.errorHandler());
-}
+});
 
 app.get('/', routes.index);
 app.get('/users', user.list);
