@@ -1,8 +1,13 @@
-@import "../../vendor/twitter/bootstrap/less/bootstrap.less";
+@import "bootstrap.min.css";
+@import "bootstrap-responsive.min.css";
 body {
   padding-top: 60px;
   padding-bottom: 40px;
+
+  div {
+    &.container {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+  }
 }
-@import "../../vendor/twitter/bootstrap/less/responsive.less";
-@iconSpritePath: "/images/bootstrap/glyphicons-halflings.png";
-@iconWhiteSpritePath:     "/images/bootstrap/glyphicons-halflings-white.png";
