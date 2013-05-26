@@ -1,6 +1,7 @@
 var express = require('express'),
     less = require('less-middleware'),
     routes = require('./routes'),
+    play = require('./routes/play'),
     http = require('http'),
     path = require('path');
 
@@ -30,6 +31,7 @@ app.configure('production', function(){
   app.use(express.errorHandler());
 });
 
+app.get('/play', play.index);
 app.get('/', routes.index);
 
 http.createServer(app).listen(app.get('port'), function(){
