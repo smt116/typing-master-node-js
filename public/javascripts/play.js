@@ -3,7 +3,10 @@
 $(function() {
   var textField = $("#playText"),
       input = $("#playInput"),
-      wordIndex = 0;
+      progressbar = $(".progress .bar"),
+      wordIndex = 0,
+      typingMistakes = 0,
+      wordingMistakes = 0;
 
   var words = function() {
     if(typeof splited === 'undefined') {
@@ -16,6 +19,10 @@ $(function() {
     //FIXME what about typing source code?
     array[index] = '<span class="' + type + '">' + array[index].replace(/(<([^>]+)>)/ig, '') + '</span> ';
     field.html(array);
+  }
+
+  var progressPercent = function(current, max) {
+    return (current / max) * 100;
   }
 
   formatWord(0, 'text-info', textField, words());
@@ -35,11 +42,13 @@ $(function() {
     if(key === 32) {
       if(input.val().trim() !== word.trim()) {
         statusClass = 'text-error';
-        console.log('nope');
+        wordingMistakes++;
+        $("#wordingMistakes").text(wordingMistakes);
       }
       formatWord(wordIndex++, statusClass, textField, words());
       formatWord(wordIndex, 'text-info', textField, words());
 
+      progressbar.attr('style', 'width: ' + progressPercent(wordIndex, words().length) + '%');
       input.val('');
     } else {
       var inputVal = input.val().trim(),
@@ -47,6 +56,11 @@ $(function() {
 
       if(inputVal !== wordVal) {
         statusClass = 'text-warning';
+
+        if(key !== 8) {
+          typingMistakes++;
+          $("#typingMistakes").text(typingMistakes);
+        }
       }
       formatWord(wordIndex, statusClass, textField, words());
     }
