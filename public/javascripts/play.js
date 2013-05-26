@@ -46,7 +46,14 @@ $(function() {
         $("#wordingMistakes").text(wordingMistakes);
       }
       formatWord(wordIndex++, statusClass, textField, words());
-      formatWord(wordIndex, 'text-info', textField, words());
+
+      if(wordIndex === words().length) {
+        //FIXME find nicer solution
+        $("#playInputArea").hide(500);
+        progressbar.parent().removeClass("progress-striped");
+      } else {
+        formatWord(wordIndex, 'text-info', textField, words());
+      }
 
       progressbar.attr('style', 'width: ' + progressPercent(wordIndex, words().length) + '%');
       input.val('');
