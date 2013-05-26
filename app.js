@@ -2,6 +2,7 @@ var express = require('express'),
     less = require('less-middleware'),
     routes = require('./routes'),
     play = require('./routes/play'),
+    mongoose = require('mongoose'),
     http = require('http'),
     path = require('path');
 
@@ -24,12 +25,17 @@ app.configure(function() {
 });
 
 app.configure('development', function(){
+  mongoose.connect('mongodb://localhost/typing-master-development');
   app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
 });
 
 app.configure('production', function(){
+  mongoose.connect('mongodb://localhost/typing-master-production');
   app.use(express.errorHandler());
 });
+
+var db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
 
 app.get('/play', play.index);
 app.get('/', routes.index);
