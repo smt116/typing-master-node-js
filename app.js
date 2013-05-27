@@ -24,13 +24,13 @@ app.configure(function() {
   app.use(express.static(path.join(__dirname, 'public')));
 });
 
-app.configure('development', function(){
+app.configure('development', function() {
   mongoose.connect('mongodb://localhost/typing-master-development');
   app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
 });
 
-app.configure('production', function(){
-  mongoose.connect('mongodb://localhost/typing-master-production');
+app.configure('production', function() {
+  mongoose.connect(process.env.mongohq);
   app.use(express.errorHandler());
 });
 
