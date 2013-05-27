@@ -13,7 +13,6 @@
     "express": "3.2.5",
     "jade": "*",
     "less-middleware": "*",
-    "twitter-bootstrap-node": "*",
     "mongoose": "*"
   }
 }
