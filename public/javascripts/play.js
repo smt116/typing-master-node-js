@@ -40,8 +40,10 @@ $(function() {
 
   var formatWord = function(index, type, field, array) {
     //FIXME what about typing source code?
-    array[index] = '<span class="' + type + '">' + array[index].replace(/(<([^>]+)>)/ig, '') + '</span> ';
-    field.html(array);
+    if(index < array.length) {
+      array[index] = '<span class="' + type + '">' + array[index].replace(/(<([^>]+)>)/ig, '') + '</span> ';
+      field.html(array);
+    }
   }
 
   var progressPercent = function(current, max) {
