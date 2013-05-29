@@ -8,7 +8,8 @@ html
     #wrap
       .container
         .masthead
-          h3.muted= "Typing master"
+          a(href="/")
+            h3.muted= "Typing master"
           .navbar
             .navbar-inner
               .container
@@ -31,5 +32,9 @@ html
       #push
     #footer
       .container
-        p.muted.credit Source code @&nbsp;
-          a(href="http://github.com/smt116/typing-master") github.
+        ul
+          li.muted.credit project by&nbsp;
+            a(href="http://smefju.pl/") Maciej Małecki.
+          li.muted.credit ·
+          li.muted.credit source code @&nbsp;
+            a(href="http://github.com/smt116/typing-master") github.
