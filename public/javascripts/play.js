@@ -1,5 +1,28 @@
 //FIXME ugly code...
 
+var typingSpeedChecker = (function() {
+  var previousTime = 0,
+      diffTime = 0,
+      chars = 0,
+      words = 0;
+
+  return {
+    check: function(keyCode) {
+      var currentTime = new Date().getTime();
+
+      if (previousTime != 0) {
+        chars++;
+        if(keyCode === 32) words++;
+        diffTime += currentTime - previousTime;
+
+        $('#cpm').html(Math.round(chars / diffTime * 6000, 2));
+        $('#wpm').html(Math.round(words / diffTime * 6000, 2));
+      }
+      previousTime = currentTime;
+    }
+  }
+});
+
 $(function() {
   var textField = $("#playText"),
       input = $("#playInput"),
@@ -17,8 +40,10 @@ $(function() {
 
   var formatWord = function(index, type, field, array) {
     //FIXME what about typing source code?
-    array[index] = '<span class="' + type + '">' + array[index].replace(/(<([^>]+)>)/ig, '') + '</span> ';
-    field.html(array);
+    if(index < array.length) {
+      array[index] = '<span class="' + type + '">' + array[index].replace(/(<([^>]+)>)/ig, '') + '</span> ';
+      field.html(array);
+    }
   }
 
   var progressPercent = function(current, max) {
@@ -71,5 +96,10 @@ $(function() {
       }
       formatWord(wordIndex, statusClass, textField, words());
     }
+  });
+
+  var timeChecker = new typingSpeedChecker();
+  input.keyup(function(event) {
+    timeChecker.check(event.keyCode);
   });
 });
