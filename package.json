@@ -1,6 +1,5 @@
 {
   "name": "typing-master",
-  "version": "0.0.1",
   "private": true,
   "scripts": {
     "start": "node app.js"
@@ -10,9 +9,9 @@
     "url": "git://github.com/smt116/typing-master.git"
   },
   "dependencies": {
-    "express": "3.2.5",
-    "jade": "*",
-    "less-middleware": "*",
-    "mongoose": "*"
+    "express": "3.2.x",
+    "jade": "0.30.x",
+    "less-middleware": "0.1.x",
+    "mongoose": "3.6.x"
   }
 }
