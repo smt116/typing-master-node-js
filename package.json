@@ -12,6 +12,7 @@
     "express": "3.2.x",
     "jade": "0.30.x",
     "less-middleware": "0.1.x",
-    "mongoose": "3.6.x"
+    "mongoose": "3.6.x",
+    "socket.io": "0.9.x"
   }
 }

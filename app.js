@@ -40,6 +40,9 @@ db.on('error', console.error.bind(console, 'connection error:'));
 app.get('/play', play.index);
 app.get('/', routes.index);
 
-http.createServer(app).listen(app.get('port'), function(){
+var httpServer = http.createServer(app).listen(app.get('port'), function(){
   console.log('Party listening on port ' + app.get('port'));
 });
+
+var socketServer = require('./lib/server');
+socketServer.listen(httpServer);
