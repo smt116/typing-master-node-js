@@ -11,7 +11,7 @@ exports.Text.findRandomText = function(callback) {
     random: { $gte: rand }
   }, function(err, object) {
     if(object === null) {
-      model.Text.findOne({
+      mongoose.model("Text").findOne({
         random: { $lte: rand }
       }, function(err, object) {
         callback(object);
