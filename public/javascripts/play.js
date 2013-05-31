@@ -29,13 +29,15 @@ $(function() {
       progressbar = $(".progress .bar"),
       wordIndex = 0,
       typingMistakes = 0,
-      wordingMistakes = 0;
+      wordingMistakes = 0,
+      block = true,
+      splitedWords = null;
 
   var words = function() {
-    if(typeof splited === 'undefined') {
-      splited = textField.html().split(" ");
+    if(splitedWords === null) {
+      splitedWords = textField.html().split(" ");
     }
-    return splited;
+    return splitedWords;
   }
 
   var formatWord = function(index, type, field, array) {
@@ -50,19 +52,18 @@ $(function() {
     return (current / max) * 100;
   }
 
-  formatWord(0, 'text-info', textField, words());
-  for(var i = 1; i < words().length; i++) {
-    formatWord(i, 'muted', textField, words());
-  }
-
   input.focus();
 
   input.keyup(function(event) {
-    //FIXME it should recognize low and upper case
     var key = event.keyCode,
         pressedChar = String.fromCharCode(key).toLowerCase(),
         word = $(words()[wordIndex]).text(),
         statusClass = 'text-success';
+
+    if(block) {
+      input.val('');
+      return;
+    }
 
     if(key === 32) {
       if(input.val().trim() !== word.trim()) {
@@ -100,6 +101,40 @@ $(function() {
 
   var timeChecker = new typingSpeedChecker();
   input.keyup(function(event) {
-    timeChecker.check(event.keyCode);
+    if(!block) {
+      timeChecker.check(event.keyCode);
+    }
+  });
+
+  var socket = io.connect();
+
+  console.log('Connecting to socket.io in progress...');
+  socket.on('connect', function(data) {
+    console.log('Connected!');
+  });
+
+  socket.on('text', function(room) {
+    textField.text(room.text);
+
+    formatWord(0, 'text-info', textField, words());
+    for(var i = 1; i < words().length; i++) {
+      formatWord(i, 'muted', textField, words());
+    }
+
+    var time = room.time;
+    var timeCounter = setInterval(function() {
+      var currentTime = new Date().getTime(),
+          diff = (room.time - currentTime) / 1000;
+      $('#timeLeft').text(diff);
+      if(diff <= 5) {
+        $('#timeLeft').removeClass('label-success');
+        $('#timeLeft').addClass('label-warning');
+      }
+      if(diff <= 0) {
+        $('#timeLeft').text('GO!');
+        clearInterval(timeCounter);
+        block = false;
+      }
+    }, 10);
   });
 });
