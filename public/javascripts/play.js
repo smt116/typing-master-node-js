@@ -165,7 +165,6 @@ $(function() {
   });
 
   socket.on('playersInRoom', function(data) {
-    console.log(data);
     for(var index in data.players) {
       if(data.players[index] !== data.current) {
         $('table tbody').append('<tr id="' + data.players[index] + '"><td>Guest</td><td><div class="progress progress-striped"><div class="bar" style="width:0%"></div><td>0</td><td>0</td><td>0</td><td>0</td></tr>');
@@ -174,7 +173,6 @@ $(function() {
   });
 
   socket.on('playerStatsData', function(data) {
-    console.log(data);
     var tr = $('#' + data.player);
     tr.find(".bar").css("width", data.stats.progress);
     tr.find(".cpm").text(data.stats.cpm);
