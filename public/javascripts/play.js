@@ -145,23 +145,20 @@ $(function() {
     for(var i = 1; i < words().length; i++) {
       formatWord(i, 'muted', textField, words());
     }
+  });
 
-    var time = room.time;
-    var timeCounter = setInterval(function() {
-      var currentTime = new Date().getTime(),
-          diff = (room.time - currentTime) / 1000;
-      $('#timeLeft').text(diff);
-      if(diff <= 5) {
-        $('#timeLeft').removeClass('label-success');
-        $('#timeLeft').addClass('label-warning');
-      }
-      if(diff <= 0) {
-        $('#timeLeft').text('GO!');
-        clearInterval(timeCounter);
-        block = false;
-        timeChecker.check(0);
-      }
-    }, 10);
+  socket.on('time', function(time) {
+    $('#timeLeft').text(time);
+    if(time <= 5) {
+      $('#timeLeft').removeClass('label-success');
+      $('#timeLeft').addClass('label-warning');
+    }
+  });
+
+  socket.on('timeUnlock', function() {
+    $('#timeLeft').text('GO!');
+    block = false;
+    timeChecker.check(0);
   });
 
   socket.on('playersInRoom', function(data) {
