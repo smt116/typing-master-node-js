@@ -1,10 +1,19 @@
 //FIXME ugly code...
 
+var socket = io.connect();
+
+console.log('Connecting to socket.io in progress...');
+socket.on('connect', function(data) {
+  console.log('Connected!');
+});
+
 var typingSpeedChecker = (function() {
   var previousTime = 0,
       diffTime = 0,
       chars = 0,
-      words = 0;
+      words = 0,
+      cpm = 0,
+      wpm = 0;
 
   return {
     check: function(keyCode) {
@@ -15,10 +24,21 @@ var typingSpeedChecker = (function() {
         if(keyCode === 32) words++;
         diffTime += currentTime - previousTime;
 
-        $('#cpm').html(Math.round(chars / diffTime * 6000, 2));
-        $('#wpm').html(Math.round(words / diffTime * 6000, 2));
+        cpm = Math.round(chars / diffTime * 6000, 2);
+        wpm = Math.round(words / diffTime * 6000, 2);
       }
       previousTime = currentTime;
+
+      return {
+        cpm: cpm,
+        wpm: wpm
+      }
+    },
+    stats: function() {
+      return {
+        cpm: cpm,
+        wpm: wpm
+      }
     }
   }
 });
@@ -26,7 +46,7 @@ var typingSpeedChecker = (function() {
 $(function() {
   var textField = $("#playText"),
       input = $("#playInput"),
-      progressbar = $(".progress .bar"),
+      progressbar = $("#you .progress .bar"),
       wordIndex = 0,
       typingMistakes = 0,
       wordingMistakes = 0,
@@ -52,6 +72,8 @@ $(function() {
     return (current / max) * 100;
   }
 
+  var timeChecker = new typingSpeedChecker();
+
   input.focus();
 
   input.keyup(function(event) {
@@ -69,7 +91,7 @@ $(function() {
       if(input.val().trim() !== word.trim()) {
         statusClass = 'text-error';
         wordingMistakes++;
-        $("#wordingMistakes").text(wordingMistakes);
+        $("#you .wordingMistakes").text(wordingMistakes);
       }
       formatWord(wordIndex++, statusClass, textField, words());
 
@@ -83,6 +105,15 @@ $(function() {
 
       progressbar.attr('style', 'width: ' + progressPercent(wordIndex, words().length) + '%');
       input.val('');
+
+      socket.emit('playerStats', {
+        socket: socket.id,
+        cpm: timeChecker.stats().cpm,
+        wpm: timeChecker.stats().wpm,
+        wording: wordingMistakes,
+        typing: typingMistakes,
+        progress: progressPercent(wordIndex, words().length) + '%'
+      });
     } else {
       var inputVal = input.val().trim(),
           wordVal = word.substring(0, input.val().length).trim();
@@ -92,25 +123,19 @@ $(function() {
 
         if(key !== 8) {
           typingMistakes++;
-          $("#typingMistakes").text(typingMistakes);
+          $("#you .typingMistakes").text(typingMistakes);
         }
       }
       formatWord(wordIndex, statusClass, textField, words());
     }
   });
 
-  var timeChecker = new typingSpeedChecker();
   input.keyup(function(event) {
     if(!block) {
-      timeChecker.check(event.keyCode);
+      var values = timeChecker.check(event.keyCode);
+      $('#you .cpm').html(values.cpm);
+      $('#you .wpm').html(values.wpm);
     }
-  });
-
-  var socket = io.connect();
-
-  console.log('Connecting to socket.io in progress...');
-  socket.on('connect', function(data) {
-    console.log('Connected!');
   });
 
   socket.on('text', function(room) {
@@ -134,7 +159,31 @@ $(function() {
         $('#timeLeft').text('GO!');
         clearInterval(timeCounter);
         block = false;
+        timeChecker.check(0);
       }
     }, 10);
+  });
+
+  socket.on('playersInRoom', function(data) {
+    console.log(data);
+    for(var index in data.players) {
+      if(data.players[index] !== data.current) {
+        $('table tbody').append('<tr id="' + data.players[index] + '"><td>Guest</td><td><div class="progress progress-striped"><div class="bar" style="width:0%"></div><td>0</td><td>0</td><td>0</td><td>0</td></tr>');
+      }
+    }
+  });
+
+  socket.on('playerStatsData', function(data) {
+    console.log(data);
+    var tr = $('#' + data.player);
+    tr.find(".bar").css("width", data.stats.progress);
+    tr.find(".cpm").text(data.stats.cpm);
+    tr.find(".wpm").text(data.stats.wpm);
+    tr.find(".typingMistakes").text(data.stats.typing);
+    tr.find(".wordingMistakes").text(data.stats.wording);
+  });
+
+  socket.on('playerStatsInit', function(data) {
+    $('table tbody').append('<tr id="' + data.player + '"><td>Guest</td><td><div class="progress progress-striped"><div class="bar" style="width:0%"></div><td class="cpm">0</td><td class="wpm">0</td><td class="typingMistakes">0</td><td class="wordingMistakes">0</td></tr>');
   });
 });
