@@ -149,7 +149,7 @@ $(function() {
 
   socket.on('time', function(time) {
     $('#timeLeft').text(time);
-    if(time <= 5) {
+    if(time <= 10) {
       $('#timeLeft').removeClass('label-success');
       $('#timeLeft').addClass('label-warning');
     }
