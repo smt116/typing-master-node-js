@@ -1,6 +1,8 @@
 extends layout
 
 block content
+  script(type='text/javascript')
+    var userTimeToStart = !{timeToStart}
   script(type='text/javascript', src='/javascripts/play.js')
   .container.play
     hr

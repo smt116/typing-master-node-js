@@ -5,7 +5,11 @@ var socket = io.connect();
 console.log('Connecting to socket.io in progress...');
 socket.on('connect', function(data) {
   console.log('Connected!');
-  socket.emit('joinRoom', 20);
+  if(userTimeToStart) {
+    socket.emit('createRoom', userTimeToStart);
+  } else {
+    socket.emit('joinRoom');
+  }
 });
 
 var typingSpeedChecker = (function() {
