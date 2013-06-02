@@ -105,15 +105,6 @@ $(function() {
 
       progressbar.attr('style', 'width: ' + progressPercent(wordIndex, words().length) + '%');
       input.val('');
-
-      socket.emit('playerStats', {
-        socket: socket.id,
-        cpm: timeChecker.stats().cpm,
-        wpm: timeChecker.stats().wpm,
-        wording: wordingMistakes,
-        typing: typingMistakes,
-        progress: progressPercent(wordIndex, words().length) + '%'
-      });
     } else {
       var inputVal = input.val().trim(),
           wordVal = word.substring(0, input.val().length).trim();
@@ -128,6 +119,15 @@ $(function() {
       }
       formatWord(wordIndex, statusClass, textField, words());
     }
+
+    socket.emit('playerStats', {
+      socket: socket.id,
+      cpm: timeChecker.stats().cpm,
+      wpm: timeChecker.stats().wpm,
+      wording: wordingMistakes,
+      typing: typingMistakes,
+      progress: progressPercent(wordIndex, words().length) + '%'
+    });
   });
 
   input.keyup(function(event) {
@@ -164,7 +164,7 @@ $(function() {
   socket.on('playersInRoom', function(data) {
     for(var index in data.players) {
       if(data.players[index] !== data.current) {
-        $('table tbody').append('<tr id="' + data.players[index] + '"><td>Guest</td><td><div class="progress progress-striped"><div class="bar" style="width:0%"></div><td>0</td><td>0</td><td>0</td><td>0</td></tr>');
+        $('table tbody').append('<tr id="' + data.players[index] + '"><td>Guest</td><td><div class="progress progress-striped"><div class="bar" style="width:0%"></div><td class="cpm">0</td><td class="wpm">0</td><td class="typingMistakes">0</td><td class="wordingMistakes">0</td></tr>');
       }
     }
   });
