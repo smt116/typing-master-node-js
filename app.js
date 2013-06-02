@@ -34,6 +34,13 @@ app.configure('production', function() {
   app.use(express.errorHandler());
 });
 
+if(process.env.NODETIME_ACCOUNT_KEY) {
+  require('nodetime').profile({
+    accountKey: process.env.NODETIME_ACCOUNT_KEY,
+    appName: 'typing-master' // optional
+  });
+}
+
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 
