@@ -145,27 +145,23 @@ $(function() {
     for(var i = 1; i < words().length; i++) {
       formatWord(i, 'muted', textField, words());
     }
+  });
 
-    var time = room.time;
-    var timeCounter = setInterval(function() {
-      var currentTime = new Date().getTime(),
-          diff = (room.time - currentTime) / 1000;
-      $('#timeLeft').text(diff);
-      if(diff <= 5) {
-        $('#timeLeft').removeClass('label-success');
-        $('#timeLeft').addClass('label-warning');
-      }
-      if(diff <= 0) {
-        $('#timeLeft').text('GO!');
-        clearInterval(timeCounter);
-        block = false;
-        timeChecker.check(0);
-      }
-    }, 10);
+  socket.on('time', function(time) {
+    $('#timeLeft').text(time);
+    if(time <= 10) {
+      $('#timeLeft').removeClass('label-success');
+      $('#timeLeft').addClass('label-warning');
+    }
+  });
+
+  socket.on('timeUnlock', function() {
+    $('#timeLeft').text('GO!');
+    block = false;
+    timeChecker.check(0);
   });
 
   socket.on('playersInRoom', function(data) {
-    console.log(data);
     for(var index in data.players) {
       if(data.players[index] !== data.current) {
         $('table tbody').append('<tr id="' + data.players[index] + '"><td>Guest</td><td><div class="progress progress-striped"><div class="bar" style="width:0%"></div><td>0</td><td>0</td><td>0</td><td>0</td></tr>');
@@ -174,7 +170,6 @@ $(function() {
   });
 
   socket.on('playerStatsData', function(data) {
-    console.log(data);
     var tr = $('#' + data.player);
     tr.find(".bar").css("width", data.stats.progress);
     tr.find(".cpm").text(data.stats.cpm);
