@@ -5,6 +5,7 @@ var socket = io.connect();
 console.log('Connecting to socket.io in progress...');
 socket.on('connect', function(data) {
   console.log('Connected!');
+  socket.emit('joinRoom', 20);
 });
 
 var typingSpeedChecker = (function() {

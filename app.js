@@ -44,10 +44,10 @@ if(process.env.NODETIME_ACCOUNT_KEY) {
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 
-app.get('/play', play.index);
+app.get('/play/', play.index);
 app.get('/', routes.index);
 
-var httpServer = http.createServer(app).listen(app.get('port'), function(){
+var httpServer = http.createServer(app).listen(app.get('port'), function() {
   console.log('Party listening on port ' + app.get('port'));
 });
 
