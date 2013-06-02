@@ -164,7 +164,7 @@ $(function() {
   socket.on('playersInRoom', function(data) {
     for(var index in data.players) {
       if(data.players[index] !== data.current) {
-        $('table tbody').append('<tr id="' + data.players[index] + '"><td>Guest</td><td><div class="progress progress-striped"><div class="bar" style="width:0%"></div><td>0</td><td>0</td><td>0</td><td>0</td></tr>');
+        $('table tbody').append('<tr id="' + data.players[index] + '"><td>Guest</td><td><div class="progress progress-striped"><div class="bar" style="width:0%"></div><td class="cpm">0</td><td class="wpm">0</td><td class="typingMistakes">0</td><td class="wordingMistakes">0</td></tr>');
       }
     }
   });
