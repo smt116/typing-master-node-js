@@ -5,10 +5,14 @@ var socket = io.connect();
 console.log('Connecting to socket.io in progress...');
 socket.on('connect', function(data) {
   console.log('Connected!');
-  if(userTimeToStart) {
-    socket.emit('createRoom', userTimeToStart);
+  if(roomId) {
+    socket.emit('joinRoom', roomId);
   } else {
-    socket.emit('joinRoom');
+    if(userTimeToStart) {
+      socket.emit('createRoom', userTimeToStart);
+    } else {
+      socket.emit('join');
+    }
   }
 });
 
@@ -143,12 +147,18 @@ $(function() {
     }
   });
 
-  socket.on('text', function(room) {
+  socket.on('text', function(room, id) {
     textField.text(room.text);
 
     formatWord(0, 'text-info', textField, words());
     for(var i = 1; i < words().length; i++) {
       formatWord(i, 'muted', textField, words());
+    }
+
+    if(id) {
+      //FIXME static url.. really? make it dynamic!
+      $('#url').text('http://typing-master.herokuapp.com/play/room/' + id);
+      $('#invite').show(500);
     }
   });
 
