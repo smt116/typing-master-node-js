@@ -105,15 +105,6 @@ $(function() {
 
       progressbar.attr('style', 'width: ' + progressPercent(wordIndex, words().length) + '%');
       input.val('');
-
-      socket.emit('playerStats', {
-        socket: socket.id,
-        cpm: timeChecker.stats().cpm,
-        wpm: timeChecker.stats().wpm,
-        wording: wordingMistakes,
-        typing: typingMistakes,
-        progress: progressPercent(wordIndex, words().length) + '%'
-      });
     } else {
       var inputVal = input.val().trim(),
           wordVal = word.substring(0, input.val().length).trim();
@@ -128,6 +119,15 @@ $(function() {
       }
       formatWord(wordIndex, statusClass, textField, words());
     }
+
+    socket.emit('playerStats', {
+      socket: socket.id,
+      cpm: timeChecker.stats().cpm,
+      wpm: timeChecker.stats().wpm,
+      wording: wordingMistakes,
+      typing: typingMistakes,
+      progress: progressPercent(wordIndex, words().length) + '%'
+    });
   });
 
   input.keyup(function(event) {
