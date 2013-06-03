@@ -4,6 +4,7 @@ block content
   script(type='text/javascript')
     var userTimeToStart = !{timeToStart};
     var roomId = !{roomId};
+    var category = !{category};
   script(type='text/javascript', src='/javascripts/play.js')
   .container.play
     hr
@@ -33,6 +34,7 @@ block content
       input.input-xlarge#playInput(type="text")
       span.label.label-info Word is accepted by pressing the space bar.
     hr
-    span#invite.label.label-info You can invite friends to this room! They can join to this room by url:&nbsp;
+    span#invite.label.label-info You can invite friends to this room! They can join to this room by url:
+    span.label.label-success
       span#url
     hr
