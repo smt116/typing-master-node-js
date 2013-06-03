@@ -9,7 +9,7 @@ socket.on('connect', function(data) {
     socket.emit('joinRoom', roomId);
   } else {
     if(userTimeToStart) {
-      socket.emit('createRoom', userTimeToStart);
+      socket.emit('createRoom', userTimeToStart, category);
     } else {
       socket.emit('join');
     }

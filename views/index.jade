@@ -1,6 +1,7 @@
 extends layout
 
 block content
+  script(type='text/javascript', src='/javascripts/index.js')
   .container
     hr
     .jumbotron
@@ -8,3 +9,38 @@ block content
       div
         a(href="play/").btn.btn-success.btn-large PROOF IT!
     hr
+    div.row-fluid
+      div.span6
+        h4 Create custom room
+        form#createRoom(method="GET", action="play/")
+          table.table
+            tbody
+              tr
+                td Time to start
+                td
+                  input(type="number", min="10", max="240", name="time", value="60")
+              tr
+                td Category
+                td
+                  script
+                  select(name="category")
+                    - for c in categories
+                      option(value="#{c}")= c
+              tr
+                td(colspan="2")
+                  input(type="submit", value="Create").btn.btn-primary
+
+      div.span6
+        h4 Rooms
+        table.table.table-striped
+          thead
+            tr
+              th Category
+              th Time to start
+              th Join
+          tbody
+            tr
+              td Lorem ipsum
+              td 31
+              td
+                div.btn.btn-primary Join
