@@ -44,11 +44,11 @@ block content
                 th Join
             tbody
               - for room in rooms
-                - roomTime = Math.floor((room.time - new Date().getTime()) / 1000)
+                - roomTime = room.time
                 - if(roomTime > 10)
                   tr
                     td= room.category
-                    td= roomTime
+                    td.roomTime= roomTime
                     td
                       a(href="play/?room=#{room.id}")
                         div.btn.btn-primary Join
