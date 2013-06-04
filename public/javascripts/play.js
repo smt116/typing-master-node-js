@@ -180,8 +180,7 @@ $(function() {
     }, 50);
 
     if(id) {
-      //FIXME static url.. really? make it dynamic!
-      $('#url').text('http://typing-master.herokuapp.com/play/?room=' + id);
+      $('#url').text('http://' + document.location.hostname + '/play/?room=' + id);
       $('#invite').show(500);
     }
   });
