@@ -1,4 +1,5 @@
-var model = require('../models/text');
+var model = require('../models/text'),
+    rooms = require('../lib/rooms')(rooms);
 
 exports.index = function(req, res) {
   model.Text.aggregate({
@@ -10,6 +11,11 @@ exports.index = function(req, res) {
     for(var i in result) {
       categories.push(result[i]._id);
     }
-    res.render('index', { categories: categories });
+    rooms.getFutureRooms(function(allRooms) {
+      res.render('index', {
+        categories: categories,
+        rooms: allRooms
+      });
+    });
   });
 };

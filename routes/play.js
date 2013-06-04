@@ -6,13 +6,13 @@ exports.index = function(req, res) {
   if(typeof timeToStart !== 'undefined' && (timeToStart > 10 && timeToStart < 240)) {
     timeToStart = parseInt(timeToStart);
   } else {
-    timeToStart = 30;
+    timeToStart = false;
   }
 
   if(typeof roomId === 'undefined') {
     roomId = false;
   } else {
-    roomId = parseInt(roomId);
+    roomId = "'" + roomId + "'";
   }
 
   if(typeof category === 'undefined') {

@@ -6,3 +6,9 @@ exports.textSchema = mongoose.Schema({
   category: String,
   text: String
 });
+
+exports.roomSchema = mongoose.Schema({
+  time: Number,
+  text: String,
+  category: String
+});

@@ -27,23 +27,30 @@ block content
                 td
                   script
                   select(name="category")
-                    - for c in categories
-                      option(value="#{c}")= c
+                    - for category in categories
+                      option(value="#{category}")= category
               tr
                 td(colspan="2")
                   input(type="submit", value="Create").btn.btn-primary
 
       div.span6
         h4 Rooms
-        table.table.table-striped
-          thead
-            tr
-              th Category
-              th Time to start
-              th Join
-          tbody
-            tr
-              td Lorem ipsum
-              td 31
-              td
-                div.btn.btn-primary Join
+        - if(rooms.length)
+          table.table.table-striped
+            thead
+              tr
+                th Category
+                th Time to start
+                th Join
+            tbody
+              - for room in rooms
+                - roomTime = Math.floor((room.time - new Date().getTime()) / 1000)
+                - if(roomTime > 10)
+                  tr
+                    td= room.category
+                    td= roomTime
+                    td
+                      a(href="play/?room=#{room.id}")
+                        div.btn.btn-primary Join
+        - else
+          h5 There is no rooms. Create new one ;)

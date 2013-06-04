@@ -157,7 +157,7 @@ $(function() {
 
     if(id) {
       //FIXME static url.. really? make it dynamic!
-      $('#url').text('http://typing-master.herokuapp.com/play/room/' + id);
+      $('#url').text('http://typing-master.herokuapp.com/play/?room=' + id);
       $('#invite').show(500);
     }
   });
@@ -165,6 +165,7 @@ $(function() {
   socket.on('time', function(time) {
     $('#timeLeft').text(time);
     if(time <= 10) {
+      $('#invite, #inviteHr, #url').hide(500);
       $('#timeLeft').removeClass('label-success');
       $('#timeLeft').addClass('label-warning');
     }
