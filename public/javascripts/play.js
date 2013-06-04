@@ -160,26 +160,30 @@ $(function() {
       formatWord(i, 'muted', textField, words());
     }
 
+    var timeCounter = setInterval(function() {
+      var currentTime = new Date().getTime(),
+          time = (room.time - currentTime) / 1000;
+
+      if(time > 0) {
+        $('#timeLeft').text(time);
+        if(time <= 10) {
+          $('#invite, #inviteHr, #url').hide(500);
+          $('#timeLeft').removeClass('label-success');
+          $('#timeLeft').addClass('label-warning');
+        }
+      } else {
+        $('#timeLeft').text('GO!');
+        block = false;
+        timeChecker.check(0);
+        clearInterval(timeCounter);
+      }
+    }, 50);
+
     if(id) {
       //FIXME static url.. really? make it dynamic!
       $('#url').text('http://typing-master.herokuapp.com/play/?room=' + id);
       $('#invite').show(500);
     }
-  });
-
-  socket.on('time', function(time) {
-    $('#timeLeft').text(time);
-    if(time <= 10) {
-      $('#invite, #inviteHr, #url').hide(500);
-      $('#timeLeft').removeClass('label-success');
-      $('#timeLeft').addClass('label-warning');
-    }
-  });
-
-  socket.on('timeUnlock', function() {
-    $('#timeLeft').text('GO!');
-    block = false;
-    timeChecker.check(0);
   });
 
   socket.on('playersInRoom', function(data) {
