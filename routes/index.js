@@ -11,7 +11,7 @@ exports.index = function(req, res) {
     for(var i in result) {
       categories.push(result[i]._id);
     }
-    rooms.getFutureRooms(function(allRooms) {
+    rooms.getAccesibleRooms(function(allRooms) {
       res.render('index', {
         categories: categories,
         rooms: allRooms
