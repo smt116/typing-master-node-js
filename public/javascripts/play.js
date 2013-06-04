@@ -165,7 +165,7 @@ $(function() {
   socket.on('time', function(time) {
     $('#timeLeft').text(time);
     if(time <= 10) {
-      $('#invite').hide(500);
+      $('#invite, #inviteHr, #url').hide(500);
       $('#timeLeft').removeClass('label-success');
       $('#timeLeft').addClass('label-warning');
     }
