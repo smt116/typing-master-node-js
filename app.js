@@ -1,7 +1,6 @@
 var express = require('express'),
     less = require('less-middleware'),
     routes = require('./routes'),
-    play = require('./routes/play'),
     mongoose = require('mongoose'),
     http = require('http'),
     path = require('path');
@@ -44,7 +43,7 @@ if(process.env.NODETIME_ACCOUNT_KEY) {
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 
-app.get(/^\/play\/(\.+)?/, play.index);
+app.get(/^\/play\/(\.+)?/, routes.play);
 app.get('/', routes.index);
 
 var httpServer = http.createServer(app).listen(app.get('port'), function() {
