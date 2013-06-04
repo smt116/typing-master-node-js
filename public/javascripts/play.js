@@ -168,7 +168,7 @@ $(function() {
     }
   });
 
-  socket.on('text', function(room, id) {
+  socket.on('text', function(room) {
     textField.text(room.text);
 
     formatWord(0, 'text-info', textField, words());
@@ -195,8 +195,8 @@ $(function() {
       }
     }, 50);
 
-    if(id) {
-      $('#url').text('http://' + document.location.hostname + '/play/?room=' + id);
+    if(room._id) {
+      $('#url').text('http://' + document.location.hostname + '/play/?room=' + room._id);
       $('#invite').show(500);
     }
   });
