@@ -1,3 +1,6 @@
+/*jshint node: true */
+'use strict';
+
 var express = require('express'),
     less = require('less-middleware'),
     routes = require('./routes'),
@@ -12,11 +15,11 @@ app.configure(function() {
   app.set('views', __dirname + '/views');
   app.set('view engine', 'jade');
   app.use(express.favicon());
-  app.use(express.logger('dev'));
   app.use(less({
     src: __dirname + '/public',
     compress: true
   }));
+  app.use(express.logger('dev'));
   app.use(express.bodyParser());
   app.use(express.methodOverride());
   app.use(app.router);
@@ -31,17 +34,17 @@ app.configure('development', function() {
 app.configure('production', function() {
   mongoose.connect(process.env.mongohq);
   app.use(express.errorHandler());
+
+  var db = mongoose.connection;
+  db.on('error', console.error.bind(console, 'connection error:'));
 });
 
 if(process.env.NODETIME_ACCOUNT_KEY) {
   require('nodetime').profile({
     accountKey: process.env.NODETIME_ACCOUNT_KEY,
-    appName: 'typing-master' // optional
+    appName: 'typing-master'
   });
 }
-
-var db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection error:'));
 
 app.get(/^\/play\/(\.+)?/, routes.play);
 app.get('/', routes.index);

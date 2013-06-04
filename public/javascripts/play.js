@@ -1,10 +1,12 @@
-//FIXME ugly code...
+/*jshint jquery: true*/
 
 var socket = io.connect();
 
-console.log('Connecting to socket.io in progress...');
+//console.log('Connecting to socket.io in progress...');
 socket.on('connect', function(data) {
-  console.log('Connected!');
+  "use strict";
+  //console.log('Connected!');
+  //roomId, userTimeToStart and category are defined in view file
   if(roomId) {
     socket.emit('joinRoom', roomId);
   } else {
@@ -17,6 +19,7 @@ socket.on('connect', function(data) {
 });
 
 var typingSpeedChecker = (function() {
+  "use strict";
   var previousTime = 0,
       diffTime = 0,
       chars = 0,
@@ -28,9 +31,11 @@ var typingSpeedChecker = (function() {
     check: function(keyCode) {
       var currentTime = new Date().getTime();
 
-      if (previousTime != 0) {
+      if (previousTime !== 0) {
         chars++;
-        if(keyCode === 32) words++;
+        if(keyCode === 32) {
+          words++;
+        }
         diffTime += currentTime - previousTime;
 
         cpm = Math.round(chars / diffTime * 6000, 2);
@@ -41,18 +46,19 @@ var typingSpeedChecker = (function() {
       return {
         cpm: cpm,
         wpm: wpm
-      }
+      };
     },
     stats: function() {
       return {
         cpm: cpm,
         wpm: wpm
-      }
+      };
     }
-  }
+  };
 });
 
 $(function() {
+  "use strict";
   var textField = $("#playText"),
       input = $("#playInput"),
       progressbar = $("#you .progress .bar"),
@@ -67,7 +73,7 @@ $(function() {
       splitedWords = textField.html().split(" ");
     }
     return splitedWords;
-  }
+  };
 
   var formatWord = function(index, type, field, array) {
     //FIXME what about typing source code?
@@ -75,11 +81,11 @@ $(function() {
       array[index] = '<span class="' + type + '">' + array[index].replace(/(<([^>]+)>)/ig, '') + '</span> ';
       field.html(array);
     }
-  }
+  };
 
   var progressPercent = function(current, max) {
     return (current / max) * 100;
-  }
+  };
 
   var timeChecker = new typingSpeedChecker();
 
@@ -87,7 +93,6 @@ $(function() {
 
   input.keyup(function(event) {
     var key = event.keyCode,
-        pressedChar = String.fromCharCode(key).toLowerCase(),
         word = $(words()[wordIndex]).text(),
         statusClass = 'text-success';
 
