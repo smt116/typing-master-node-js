@@ -202,7 +202,6 @@ $(function() {
   });
 
   socket.on('playersInRoom', function(data) {
-    console.log(data.players);
     for(var index in data.players) {
       if(data.players[index] !== data.current.session && data.players[index] !== data.current.socket) {
         $('table tbody').append('<tr id="' + data.players[index] + '"><td>Guest</td><td><div class="progress progress-striped"><div class="bar" style="width:0%"></div><td class="cpm">0</td><td class="wpm">0</td><td class="typingMistakes">0</td><td class="wordingMistakes">0</td></tr>');
