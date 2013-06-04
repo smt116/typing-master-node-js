@@ -1,4 +1,13 @@
 $(function() {
+  $("input[name='time']").blur(function() {
+    var val = parseInt($(this).val(), 10);
+    if(val > 240) {
+      $(this).val(240);
+    } else if(val < 10) {
+      $(this).val(15);
+    }
+  });
+
   $('td.roomTime').each(function(i, e) {
     var time = parseInt($(e).text(), 10);
 

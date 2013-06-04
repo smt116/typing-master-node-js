@@ -25,7 +25,7 @@ exports.play = function(req, res) {
       timeToStart = req.param('time'),
       roomId = req.param('room');
 
-  if(typeof timeToStart !== 'undefined' && (timeToStart > 10 && timeToStart < 240)) {
+  if(typeof timeToStart !== 'undefined' && (timeToStart > 10 && timeToStart <= 240)) {
     timeToStart = parseInt(timeToStart);
   } else {
     timeToStart = false;
