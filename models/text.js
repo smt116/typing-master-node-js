@@ -1,3 +1,6 @@
+/*jshint node: true */
+'use strict';
+
 var mongoose = require("mongoose"),
     schema = require("../db/schema");
 
@@ -20,4 +23,4 @@ exports.Text.findRandomText = function(callback) {
       callback(object);
     }
   });
-}
+};
