@@ -6,15 +6,31 @@ var socket = io.connect();
 socket.on('connect', function(data) {
   "use strict";
   //console.log('Connected!');
-  //roomId, userTimeToStart and category are defined in view file
-  if(roomId) {
-    socket.emit('joinRoom', roomId);
-  } else {
-    if(userTimeToStart) {
-      socket.emit('createRoom', userTimeToStart, category);
-    } else {
-      socket.emit('join');
+
+  var session = (function() {
+    var regex = new RegExp("id=([^;]+)"),
+    sessionFromCookie = regex.exec(document.cookie),
+    session = false;
+
+    if(sessionFromCookie !== null) {
+      session = unescape(sessionFromCookie[1]);
     }
+
+    return session;
+  })();
+  socket.emit('auth', session);
+
+  socket.on('setSession', function(id) {
+    var expires = new Date();
+    expires.setDate(expires.getTime() + (3600 * 1000));
+    document.cookie = "id=" + id + "; expires=" + expires.toUTCString();
+  });
+
+  //roomId, userTimeToStart and category are defined in view file
+  if(userTimeToStart) {
+    socket.emit('createRoom', userTimeToStart, category);
+  } else {
+    socket.emit('joinRoom', roomId);
   }
 });
 
@@ -186,8 +202,9 @@ $(function() {
   });
 
   socket.on('playersInRoom', function(data) {
+    console.log(data.players);
     for(var index in data.players) {
-      if(data.players[index] !== data.current) {
+      if(data.players[index] !== data.current.session && data.players[index] !== data.current.socket) {
         $('table tbody').append('<tr id="' + data.players[index] + '"><td>Guest</td><td><div class="progress progress-striped"><div class="bar" style="width:0%"></div><td class="cpm">0</td><td class="wpm">0</td><td class="typingMistakes">0</td><td class="wordingMistakes">0</td></tr>');
       }
     }
@@ -203,6 +220,8 @@ $(function() {
   });
 
   socket.on('playerStatsInit', function(data) {
-    $('table tbody').append('<tr id="' + data.player + '"><td>Guest</td><td><div class="progress progress-striped"><div class="bar" style="width:0%"></div><td class="cpm">0</td><td class="wpm">0</td><td class="typingMistakes">0</td><td class="wordingMistakes">0</td></tr>');
+    if($('#' + data.player).length === 0) {
+      $('table tbody').append('<tr id="' + data.player + '"><td>Guest</td><td><div class="progress progress-striped"><div class="bar" style="width:0%"></div><td class="cpm">0</td><td class="wpm">0</td><td class="typingMistakes">0</td><td class="wordingMistakes">0</td></tr>');
+    }
   });
 });
