@@ -38,8 +38,8 @@ var typingSpeedChecker = (function() {
         }
         diffTime += currentTime - previousTime;
 
-        cpm = Math.round(chars / diffTime * 6000, 2);
-        wpm = Math.round(words / diffTime * 6000, 2);
+        cpm = Math.round(chars / diffTime * 36000, 2);
+        wpm = Math.round(words / diffTime * 36000, 2);
       }
       previousTime = currentTime;
 
