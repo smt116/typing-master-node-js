@@ -176,9 +176,9 @@ $(function() {
       formatWord(i, 'muted', textField, words());
     }
 
+    var timeLeft = 0;
     var timeCounter = setInterval(function() {
-      var currentTime = new Date().getTime(),
-          time = (room.time - currentTime) / 1000;
+      var time = (room.time - timeLeft)/1000;
 
       if(time > 0) {
         $('#timeLeft').text(time);
@@ -193,7 +193,8 @@ $(function() {
         timeChecker.check(0);
         clearInterval(timeCounter);
       }
-    }, 50);
+      timeLeft += 15;
+    }, 15);
 
     if(room._id) {
       $('#url').text('http://' + document.location.hostname + '/play/?room=' + room._id);
